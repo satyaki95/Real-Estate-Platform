@@ -12,6 +12,7 @@ export const register = async (req, res) => {
 
     if (userExists) {
       return res.status(400).json({
+        success: false,
         message: "User already exists",
       });
     }
@@ -42,6 +43,7 @@ export const register = async (req, res) => {
     }
 
     res.status(201).json({
+      success: true,
       message:
         "User registered successfully. Please check your email for verification.",
       user: {
@@ -65,6 +67,7 @@ export const login = async (req, res) => {
 
     if (!email || !password) {
       return res.status(400).json({
+        success: false,
         message: "Email and password are required",
       });
     }
@@ -73,12 +76,14 @@ export const login = async (req, res) => {
 
     if (!user) {
       return res.status(400).json({
+        success: false,
         message: "Invalid email or password",
       });
     }
 
     if (!user.isVerified) {
       return res.status(403).json({
+        success: false,
         message: "Please verify your email or contact support.",
       });
     }
@@ -87,12 +92,14 @@ export const login = async (req, res) => {
 
     if (!isMatch) {
       return res.status(400).json({
+        success: false,
         message: "Invalid email or password",
       });
     }
 
     if (user.isBlocked) {
       return res.status(403).json({
+        success: false,
         message: "Your account has been blocked. Please contact support.",
       });
     }
@@ -104,6 +111,7 @@ export const login = async (req, res) => {
     );
 
     res.status(200).json({
+      success: true,
       message: "Login successful",
       token,
       user,
@@ -111,6 +119,7 @@ export const login = async (req, res) => {
   } catch (error) {
     console.error("Error logging in user:", error);
     res.status(500).json({
+      success: false,
       message: error.message || "Server error",
     });
   }
@@ -124,6 +133,7 @@ export const getMe = async (req, res) => {
 
     if (!user) {
       return res.status(404).json({
+        success: false,
         message: "User not found",
       });
     }
@@ -134,6 +144,7 @@ export const getMe = async (req, res) => {
   } catch (error) {
     console.error("Error fetching user profile:", error);
     res.status(500).json({
+      success: false,
       message: error.message || "Server error",
     });
   }
@@ -146,6 +157,7 @@ export const verifyEmail = async (req, res) => {
 
     if (!email || !code) {
       return res.status(400).json({
+        success: false,
         message: "Email and verification code are required",
       });
     }
@@ -154,18 +166,21 @@ export const verifyEmail = async (req, res) => {
 
     if (!user) {
       return res.status(404).json({
+        success: false,
         message: "User not found",
       });
     }
 
     if (user.isVerified) {
       return res.status(400).json({
+        success: false,
         message: "Email is already verified",
       });
     }
 
     if (user.verificationToken !== code) {
       return res.status(400).json({
+        success: false,
         message: "Invalid verification code",
       });
     }
@@ -194,9 +209,10 @@ export const forgotPassword = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ message: "No user found with that email address" });
+      return res.status(404).json({
+        success: false,
+        message: "No user found with that email address",
+      });
     }
 
     const resetToken = crypto.randomBytes(20).toString("hex");
@@ -226,17 +242,17 @@ export const forgotPassword = async (req, res) => {
       });
       res
         .status(200)
-        .json({ message: "Password reset email sent", success: true });
+        .json({ success: true, message: "Password reset email sent" });
     } catch (error) {
       user.resetPasswordToken = undefined;
       user.resetPasswordExpire = undefined;
       await user.save();
       return res
         .status(500)
-        .json({ message: "Could not send email", success: false });
+        .json({ success: false, message: "Could not send email" });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message, success: false });
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
