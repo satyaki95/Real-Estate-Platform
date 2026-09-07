@@ -151,3 +151,33 @@ export const updateProperty = async (req, res) => {
     });
   }
 };
+
+// to delete a property
+export const deleteProperty = async (req, res) => {
+  try {
+    const property = await Property.findById(req.params.id);
+    if (!property) {
+      return res.status(404).json({
+        success: false,
+        message: "Property not found",
+      });
+    }
+    if (property.seller.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized",
+      });
+    }
+    await property.remove();
+    res.json({
+      success: true,
+      message: "Property deleted",
+    });
+  } catch (error) {
+    console.error("DELETE_PROPERTY_ERROR:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Internal server error while deleting property",
+    });
+  }
+};
