@@ -6,11 +6,19 @@ import {
   HiHome,
   HiLightningBolt,
   HiLocationMarker,
+  HiMail,
   HiOfficeBuilding,
+  HiPhone,
   HiSearch,
   HiShieldCheck,
   HiVideoCamera,
 } from "react-icons/hi";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+  FaTwitter,
+} from "react-icons/fa";
 import { landingPageStyles as s } from "../../assets/dummyStyles";
 import Navbar from "../../components/common/Navbar";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +27,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import API_URL from "../../config";
 import banner from "../../assets/bannerimage.png";
+import PropertyCard from "../../components/common/PropertyCard";
+import logo from "../../assets/hexagonlogo1.png";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -68,7 +78,7 @@ const LandingPage = () => {
       const isWishlisted = wishlistedIds.includes(propertyId);
 
       if (isWishlisted) {
-        await axios.delete(`${API_URL}/api/wishlist${propertyId}`, {
+        await axios.delete(`${API_URL}/api/wishlist/${propertyId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setWishlistedIds((prev) => prev.filter((id) => id !== propertyId));
@@ -389,9 +399,164 @@ const LandingPage = () => {
           <div className={s.featuredHeader}>
             <span className={s.featuredBadge}>handpicked for You</span>
             <h2 className={s.featureTitle}>Featured Collections</h2>
+            <p className={s.featuredSubtitle}>
+              Discover high-value properties curated by our experts for their
+              exceptional design, location, and investment potential.
+            </p>
+          </div>
+          {loading ? (
+            <div className={s.loadingContainer}>
+              <div className={s.loader}></div>
+            </div>
+          ) : error ? (
+            <div className={s.errorContainer}>
+              <p>{error}</p>
+            </div>
+          ) : (
+            <div className={s.propertiesGrid}>
+              {properties
+                .filter((p) => p)
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .slice(0, 6)
+                .map((property) => (
+                  <PropertyCard
+                    key={property._id}
+                    property={property}
+                    isWishlisted={wishlistedIds.includes(String(property._id))}
+                    onToggleWishlist={handleToggleWishlist}
+                  />
+                ))}
+            </div>
+          )}
+          <div className={s.discoverButtonContainer}>
+            <button
+              onClick={() => navigate("/properties")}
+              className={s.discoverButton}
+            >
+              Discover More Properties
+            </button>
           </div>
         </div>
       </section>
+      {/* footer */}
+      <footer className={s.footer}>
+        <div className={s.container}>
+          <div className={s.footerMainGrid}>
+            <div className={s.footerBrand}>
+              <div className={s.brandLogo}>
+                <div className={s.brandIcon}>RE</div>
+                RealEstate
+              </div>
+              <p className={s.brandDesc}>
+                The most trusted platform for buying, selling, and renting
+                premium real estate globally. We make property hunting seamless.
+              </p>
+              <div className={s.socialIcons}>
+                {[FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn].map(
+                  (Icon, idx) => (
+                    <a href="#" key={idx} className={s.socialIcon}>
+                      <Icon size={16} />
+                    </a>
+                  ),
+                )}
+              </div>
+            </div>
+            {/* Column 2: Quick Links */}
+            <div>
+              <h4 className={s.footerHeading}>Company</h4>
+              <ul className={s.footerLinks}>
+                <li>
+                  <a href="/" className={s.footerLink}>
+                    Home
+                  </a>
+                </li>
+                <li>
+                  <a href="/properties" className={s.footerLink}>
+                    Property
+                  </a>
+                </li>
+                <li>
+                  <a href="/wishlist" className={s.footerLink}>
+                    Wishlist
+                  </a>
+                </li>
+                <li>
+                  <a href="/contact" className={s.footerLink}>
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 3: Contact Info */}
+            <div>
+              <h4 className={s.footerHeading}>Support</h4>
+              <ul className={s.footerLinks}>
+                <li className={s.contactInfo}>
+                  <HiMail className="text-primary text-xl" />{" "}
+                  contact@realestate.com
+                </li>
+                <li className={s.contactInfo}>
+                  <HiPhone className="text-primary text-xl" /> +91 1234567890
+                </li>
+                <li className={s.contactInfoStart}>
+                  <HiLocationMarker
+                    className={`text-primary ${s.contactIcon}`}
+                  />
+                  123 Business Hub, India
+                </li>
+              </ul>
+            </div>
+            {/* column 4 */}
+            <div>
+              <h4 className={s.footerHeading}>Newsletter</h4>
+              <p className={s.newsletterDesc}>
+                Subscribe to get the latest listings and market insights
+                directly in your inbox.
+              </p>
+              <div className={s.newsletterInputWrapper}>
+                <input
+                  type="email"
+                  placeholder="Enter your Email"
+                  className={s.newsletterInput}
+                />
+                <button className={s.newsletterButton}>Join</button>
+              </div>
+            </div>
+          </div>
+          {/* bottom bar */}
+          <div className={s.bottomBar}>
+            <div className={s.bottomBarFlex}>
+              <p>
+                &copy; {new Date().getFullYear()} RealEstate. All rights
+                reserved.
+              </p>
+              <div className={s.footerLegalLinks}>
+                <a href="#" className={s.footerLink}>
+                  Privacy Policy
+                </a>
+                <a href="#" className={s.footerLink}>
+                  Terms of Service
+                </a>
+                <a href="#" className={s.footerLink}>
+                  Cookies Settings
+                </a>
+              </div>
+            </div>
+            <div className={s.designCredit}>
+              <img src={logo} alt="logo" className={s.designLogo} />
+              <span className=" text-text-muted">Designed by</span>
+              <a
+                href="https://github.com/satyaki95"
+                target="_blank"
+                className={s.designLink}
+              >
+                Satyaki Saha
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
