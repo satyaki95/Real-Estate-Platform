@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/immutability */
 /* eslint-disable react-hooks/set-state-in-effect */
-/* eslint-disable no-unused-vars */
+
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import API_URL from "../config";
@@ -129,6 +129,7 @@ export const AuthProvider = ({ children }) => {
         setUser,
         token,
         loading,
+        setLoading,
         login,
         register,
         logout,
