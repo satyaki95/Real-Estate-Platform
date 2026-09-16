@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import { useState } from "react";
 import { registerStyles as s } from "../../assets/dummyStyles";
 import Navbar from "../../components/common/Navbar";
