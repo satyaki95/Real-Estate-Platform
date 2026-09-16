@@ -6,6 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import API_URL from "../../config";
+import PropertyCard from "../../components/common/PropertyCard";
 import {
   HiBadgeCheck,
   HiCalendar,
@@ -523,7 +524,30 @@ const PropertyDetails = () => {
             ))}
           </div>
         </div>
-        <section></section>
+        <section className={s.similarSection}>
+          <div className={s.similarHeader}>
+            <div>
+              <h2 className={s.similarTitle}>Similar Properties</h2>
+              <p className={s.similarSubtitle}>
+                Listings you might like in {property.city}.
+              </p>
+            </div>
+            <Link to="/properties" className={s.similarAllLink}>
+              All Listings <HiChevronRight />
+            </Link>
+          </div>
+          <div className={s.similarGrid}>
+            {similarProperties.length > 0 ? (
+              similarProperties
+                .slice(0, 3)
+                .map((p) => <PropertyCard key={p._id} property={p} />)
+            ) : (
+              <div className={s.similarEmptyState}>
+                No similar properties found in this location.
+              </div>
+            )}
+          </div>
+        </section>
       </main>
     </div>
   );
