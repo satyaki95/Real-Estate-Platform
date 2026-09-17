@@ -22,7 +22,8 @@ const PORT = 5000;
 connectDB();
 
 // Middlewares
-const allowedOrigins = ["http://localhost:5173"].filter(Boolean);
+const clientUrl = process.env.CLIENT_URL;
+const allowedOrigins = [`${clientUrl}`].filter(Boolean);
 app.use(
   cors({
     origin: function (origin, callback) {
