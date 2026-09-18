@@ -10,6 +10,7 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import Profile from "./pages/shared/Profile";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminLayout from "./components/AdminLayout";
+import AdminUsers from "./pages/admin/AdminUsers";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
 
         <Route element={<AdminLayout />}>
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
         </Route>
       </Routes>
     </div>
