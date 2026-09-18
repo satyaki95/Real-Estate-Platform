@@ -23,6 +23,6 @@ adminRouter.delete("/properties/:id", deleteProperty);
 adminRouter.get("/inquiries", getAllInquiries);
 adminRouter.get("/stats", getDashboardStats);
 adminRouter.get("/pending-sellers", getPendingSeller);
-adminRouter.patch("/approve-seller", approveSeller);
+adminRouter.patch("/approve-seller/:id", approveSeller);
 
 export default adminRouter;
