@@ -236,7 +236,6 @@ const AddProperty = () => {
                       className={`${s.input} ${s.select}`}
                     >
                       <option value="sale">For Sale</option>
-                      <option value="rent">For Rent</option>
                     </select>
                   </div>
                 </div>
