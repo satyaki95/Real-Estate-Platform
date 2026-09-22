@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useNavigate } from "react-router-dom";
 import { addPropertyStyles as s } from "../../assets/dummyStyles";
 import { useAuth } from "../../context/AuthContext";
