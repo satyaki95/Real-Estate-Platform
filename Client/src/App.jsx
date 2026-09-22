@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import LandingPage from "./pages/shared/LandingPage";
 import Properties from "./pages/shared/Properties";
 import PropertyDetails from "./pages/shared/PropertyDetails";
@@ -19,16 +19,60 @@ import SellerLayout from "./components/SellerLayout";
 import SellerDashboard from "./pages/seller/SellerDashboard";
 import AddProperty from "./pages/seller/AddProperty";
 import MyProperties from "./pages/seller/MyProperties";
+import EditProperty from "./pages/seller/EditProperty";
+import { PublicRoute } from "./components/common/ProtectedRoute";
+import { useEffect, useState } from "react";
+import { FaChevronUp } from "react-icons/fa";
+
+// to scroll to top whenever the route is change
+const ScrollToTopOnRouteChange = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
+  return null;
+};
+
+// floating scroll to top btn
+const ScrollTopButton = () => {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setVisible(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleClick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      className={`fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full shadow-lg transition-all duration-300 ${visible ? "scale-100 opacity-100 bg-emerald-500 text-white hover:bg-green-400" : " pointer-events-none scale-0 opacity-0"}`}
+    >
+      <FaChevronUp size={22} />
+    </button>
+  );
+};
 
 const App = () => {
   return (
     <div>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+        </Route>
 
         <Route path="/" element={<LandingPage />} />
         <Route path="/properties" element={<Properties />} />
@@ -49,6 +93,7 @@ const App = () => {
           <Route path="/dashboard" element={<SellerDashboard />} />
           <Route path="/add-property" element={<AddProperty />} />
           <Route path="/my-properties" element={<MyProperties />} />
+          <Route path="/edit-property/:id" element={<EditProperty />} />
         </Route>
       </Routes>
     </div>
