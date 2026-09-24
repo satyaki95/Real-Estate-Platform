@@ -27,6 +27,7 @@ import {
 import { useEffect, useState } from "react";
 import { FaChevronUp } from "react-icons/fa";
 import { useAuth } from "./context/AuthContext";
+import MyInquiries from "./pages/buyer/MyInquiries";
 
 // to scroll to top whenever the route is change
 const ScrollToTopOnRouteChange = () => {
@@ -106,6 +107,7 @@ const App = () => {
           }
         >
           <Route element={<SellerLayoutWrapper />}>
+            <Route path="/inquiries" element={<MyInquiries />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
 
