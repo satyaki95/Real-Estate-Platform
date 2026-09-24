@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import LandingPage from "./pages/shared/LandingPage";
 import Properties from "./pages/shared/Properties";
 import PropertyDetails from "./pages/shared/PropertyDetails";
@@ -20,9 +20,13 @@ import SellerDashboard from "./pages/seller/SellerDashboard";
 import AddProperty from "./pages/seller/AddProperty";
 import MyProperties from "./pages/seller/MyProperties";
 import EditProperty from "./pages/seller/EditProperty";
-import { PublicRoute } from "./components/common/ProtectedRoute";
+import {
+  ProtectedRoute,
+  PublicRoute,
+} from "./components/common/ProtectedRoute";
 import { useEffect, useState } from "react";
 import { FaChevronUp } from "react-icons/fa";
+import { useAuth } from "./context/AuthContext";
 
 // to scroll to top whenever the route is change
 const ScrollToTopOnRouteChange = () => {
@@ -62,9 +66,27 @@ const ScrollTopButton = () => {
   );
 };
 
+// smart layout wrapper for seller and buyer
+const SellerLayoutWrapper = () => {
+  const { user } = useAuth();
+  return user?.role === "seller" ? <SellerLayout /> : <Outlet />;
+};
+
 const App = () => {
+  useEffect(() => {
+    document.body.style.overflowX = "hidden";
+    document.documentElement.style.overflowX = "hidden";
+
+    return () => {
+      document.body.style.overflowX = "";
+      document.documentElement.style.overflowX = "";
+    };
+  }, []); // prevent horizontal overflow on the whole app
+
   return (
-    <div>
+    <div className=" min-h-screen w-full overflow-hidden">
+      <ScrollToTopOnRouteChange />
+      <ScrollTopButton />
       <Routes>
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<Login />} />
@@ -78,23 +100,42 @@ const App = () => {
         <Route path="/properties" element={<Properties />} />
         <Route path="/property/:id" element={<PropertyDetails />} />
 
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          element={
+            <ProtectedRoute allowedRoles={["buyer", "seller", "admin"]} />
+          }
+        >
+          <Route element={<SellerLayoutWrapper />}>
+            <Route path="/profile" element={<Profile />} />
+          </Route>
 
-        <Route element={<AdminLayout />}>
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/users" element={<AdminUsers />} />
-          <Route path="/admin/seller-requests" element={<SellerRequests />} />
-          <Route path="/admin/properties" element={<AdminProperties />} />
-          <Route path="/admin/inquiries" element={<AdminInquiries />} />
-          <Route path="/admin/contacts" element={<AdminContacts />} />
+          <Route element={<ProtectedRoute allowedRoles={["seller"]} />}>
+            <Route element={<SellerLayout />}>
+              <Route path="/dashboard" element={<SellerDashboard />} />
+              <Route path="/seller-dashboard" element={<SellerDashboard />} />
+
+              <Route path="/add-property" element={<AddProperty />} />
+              <Route path="/my-properties" element={<MyProperties />} />
+              <Route path="/edit-property/:id" element={<EditProperty />} />
+            </Route>
+          </Route>
+
+          <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+            <Route element={<AdminLayout />}>
+              <Route path="/admin-dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/users" element={<AdminUsers />} />
+              <Route
+                path="/admin/seller-requests"
+                element={<SellerRequests />}
+              />
+              <Route path="/admin/properties" element={<AdminProperties />} />
+              <Route path="/admin/inquiries" element={<AdminInquiries />} />
+              <Route path="/admin/contacts" element={<AdminContacts />} />
+            </Route>
+          </Route>
         </Route>
 
-        <Route element={<SellerLayout />}>
-          <Route path="/dashboard" element={<SellerDashboard />} />
-          <Route path="/add-property" element={<AddProperty />} />
-          <Route path="/my-properties" element={<MyProperties />} />
-          <Route path="/edit-property/:id" element={<EditProperty />} />
-        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );
