@@ -3,6 +3,8 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
+// Route guard that blocks access to pages until the user is authenticated.
+// `allowedRoles` is used to permit only specific roles such as buyer, seller, or admin.
 const ProtectedRoute = ({ allowedRoles }) => {
   const { user, loading } = useAuth();
 
@@ -32,7 +34,8 @@ const ProtectedRoute = ({ allowedRoles }) => {
   return <Outlet />;
 };
 
-// public route
+// PublicRoute allows guest users to visit login and registration pages,
+// while redirecting already authenticated users away from those screens.
 const PublicRoute = () => {
   const { user, loading } = useAuth();
 

@@ -13,6 +13,7 @@ import {
   HiX,
 } from "react-icons/hi";
 
+// Profile settings screen for updating personal details, contact info, and avatar image.
 const Profile = () => {
   const { user, setUser, token } = useAuth();
   const [isEditing, setIsEditing] = useState(false);

@@ -12,6 +12,7 @@ import { useAuth } from "../context/AuthContext";
 import Logo from "./common/Logo";
 import { NavLink } from "react-router-dom";
 
+// Sidebar for seller-specific tools like listings, leads, messages, and profile actions.
 const SellerSidebar = ({ isOpen, onClose }) => {
   const { logout, user } = useAuth();
 

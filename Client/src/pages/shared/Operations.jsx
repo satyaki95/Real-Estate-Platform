@@ -12,6 +12,7 @@ import API_URL from "../../config";
 import { useAuth } from "../../context/AuthContext";
 import Navbar from "../../components/common/Navbar";
 
+// Shared operations dashboard for maintenance requests and amenity bookings.
 const maintenanceInitial = {
   propertyId: "",
   title: "",

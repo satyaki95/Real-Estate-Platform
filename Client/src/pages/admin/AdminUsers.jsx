@@ -18,6 +18,7 @@ import {
   HiOutlineTrash,
 } from "react-icons/hi";
 
+// Manage all platform users, including filtering, blocking, and deleting accounts.
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);

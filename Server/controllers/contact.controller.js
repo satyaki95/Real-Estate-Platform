@@ -1,7 +1,7 @@
 import Contact from "../models/contact.model.js";
 import sendEmail from "../utils/sendEmail.js";
 
-// to create a contact
+// Create a new contact submission from a website visitor and email the admin team.
 export const createContact = async (req, res) => {
   try {
     const { name, email, phone, role, message } = req.body;
@@ -52,7 +52,7 @@ export const createContact = async (req, res) => {
   }
 };
 
-// to get all contact(admin only)
+// Fetch all contact messages for the admin inbox sorted by the newest request first.
 export const getAllContacts = async (req, res) => {
   try {
     const contacts = await Contact.find().sort({ createdAt: -1 });

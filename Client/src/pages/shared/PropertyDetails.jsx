@@ -23,6 +23,7 @@ import {
   HiX,
 } from "react-icons/hi";
 
+// Full property detail page with gallery, enquiry, wishlist, and chat actions.
 const PropertyDetails = () => {
   const { id } = useParams();
   const { user, token } = useAuth();

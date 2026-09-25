@@ -27,6 +27,8 @@ const Register = () => {
   };
 
   // to submit the data (ie. to create a user)
+  // Submit the registration form, normalize the selected role,
+  // then redirect the user to the email verification screen on success.
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);

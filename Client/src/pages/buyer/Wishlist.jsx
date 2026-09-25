@@ -11,6 +11,7 @@ import { HiHeart, HiTrash } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import PropertyCard from "../../components/common/PropertyCard";
 
+// Dashboard for saved properties that the buyer wants to revisit later.
 const Wishlist = () => {
   const { token } = useAuth();
   const [wishlistItems, setWishlistItems] = useState([]);

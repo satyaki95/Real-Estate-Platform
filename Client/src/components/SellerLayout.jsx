@@ -6,6 +6,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import DashboardNavbar from "./DashboardNavbar";
 import PendingApproval from "../pages/seller/PendingApproval";
 
+// Seller dashboard shell that shows the approval gate until the seller account is approved.
 const SellerLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user } = useAuth();

@@ -12,6 +12,7 @@ import { useAuth } from "../context/AuthContext";
 import Logo from "./common/Logo";
 import { NavLink } from "react-router-dom";
 
+// Sidebar navigation for admin pages with links to users, listings, inquiries, and settings.
 const AdminSidebar = ({ isOpen, onClose }) => {
   const { logout } = useAuth();
 

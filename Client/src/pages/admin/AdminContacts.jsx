@@ -7,6 +7,7 @@ import axios from "axios";
 import API_URL from "../../config";
 import { HiOutlineClock, HiOutlineMail, HiOutlinePhone } from "react-icons/hi";
 
+// Inbox for all platform contact requests and visitor messages.
 const AdminContacts = () => {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);

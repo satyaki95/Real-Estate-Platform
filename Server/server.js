@@ -5,6 +5,8 @@ import http from "http";
 import { Server } from "socket.io";
 import { connectDB } from "./config/db.js";
 
+// Import all route modules so the API can expose endpoints for auth,
+// users, properties, inquiries, chat, and admin actions.
 import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
 import propertyRouter from "./routes/property.routes.js";
@@ -16,13 +18,18 @@ import chatRouter from "./routes/chat.routes.js";
 import maintenanceRouter from "./routes/maintenance.routes.js";
 import amenityBookingRouter from "./routes/amenityBooking.routes.js";
 
+// Main Express server for the Real Estate Platform.
+// This file wires together the database connection, all API routes,
+// CORS configuration, and the Socket.IO layer used for chat and live updates.
 const app = express();
 const PORT = 5000;
 
-// DB
+// Establish the MongoDB connection as soon as the backend starts.
 connectDB();
 
-// Middlewares
+// Restrict cross-origin requests to the frontend URL configured in the environment.
+// This helps prevent unauthorized access from other frontends while allowing
+// the React app to call the API during local development and production hosting.
 const clientUrl = process.env.CLIENT_URL;
 const allowedOrigins = [`${clientUrl}`].filter(Boolean);
 app.use(
@@ -39,7 +46,9 @@ app.use(
 );
 app.use(express.json());
 
-// Routes
+// Register all backend route groups under a versioned-like API namespace.
+// Each router handles a specific feature area such as auth, property listings,
+// admin approval, inquiries, or chat-related operations.
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/property", propertyRouter);
@@ -51,12 +60,16 @@ app.use("/api/chat", chatRouter);
 app.use("/api/maintenance", maintenanceRouter);
 app.use("/api/amenity-bookings", amenityBookingRouter);
 
+// Basic health check endpoint for quick server verification.
 app.get("/", (req, res) => {
   res.send("API WORKING");
 });
 
 const server = http.createServer(app);
-// socket.io setup
+
+// Socket.IO enables real-time communication for chat rooms and live updates.
+// The backend stores the socket server on Express so controllers or routes can
+// emit events to specific users or conversation channels when needed.
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
@@ -66,14 +79,18 @@ const io = new Server(server, {
 app.set("io", io);
 
 io.on("connection", (socket) => {
+  // Join a user-specific room so notifications can be sent to one user only.
   socket.on("joinUser", ({ userId, role }) => {
     if (userId) socket.join(`user:${userId}`);
     if (role) socket.join(`role:${role}`);
   });
+
+  // Join a specific conversation room for chat messaging.
   socket.on("joinChat", (chatId) => {
     socket.join(chatId);
   });
 
+  // Broadcast a sent message to all users in that chat room.
   socket.on("sendMessage", (data) => {
     io.to(data.chatId).emit("receiveMessage", data);
   });

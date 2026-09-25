@@ -20,6 +20,7 @@ import { Link } from "react-router-dom";
 import PropertyCard from "../../components/common/PropertyCard";
 import MaintenanceAmenitySummary from "../../components/common/MaintenanceAmenitySummary";
 
+// Seller overview page with portfolio stats, recent inquiries, and listing controls.
 const SellerDashboard = () => {
   const { logout, token } = useAuth();
   const [stats, setStats] = useState({

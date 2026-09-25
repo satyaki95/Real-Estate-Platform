@@ -1,6 +1,7 @@
 import AmenityBooking from "../models/amenityBooking.model.js";
 import Property from "../models/property.model.js";
 
+// Enrich amenity bookings with related property and user details before sending them back.
 const populateBooking = (query) =>
   query
     .populate("property", "title city area amenities")
@@ -8,6 +9,7 @@ const populateBooking = (query) =>
     .populate("seller", "name email phone")
     .sort({ createdAt: -1 });
 
+// Create a new amenity booking after validating the time range and checking for conflicts.
 export const createBooking = async (req, res) => {
   try {
     const { propertyId, amenity, startAt, endAt } = req.body;
@@ -61,6 +63,7 @@ export const createBooking = async (req, res) => {
   }
 };
 
+// List amenity bookings for the logged-in buyer or seller with populated booking data.
 export const listBookings = async (req, res) => {
   try {
     const filter =
@@ -79,6 +82,7 @@ export const listBookings = async (req, res) => {
   }
 };
 
+// Update an amenity booking status and emit a live update to the affected users.
 export const updateBooking = async (req, res) => {
   try {
     const booking = await AmenityBooking.findById(req.params.id);

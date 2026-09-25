@@ -33,7 +33,10 @@ import Contact from "./pages/shared/Contact";
 import Wishlist from "./pages/buyer/Wishlist";
 import Operations from "./pages/shared/Operations";
 
-// to scroll to top whenever the route is change
+// The main app router controls all public and protected pages for buyers,
+// sellers, and admins. It centralizes navigation, access control, and layout switching.
+
+// This component ensures the page always starts from the top when the URL changes.
 const ScrollToTopOnRouteChange = () => {
   const { pathname } = useLocation();
 
@@ -43,7 +46,7 @@ const ScrollToTopOnRouteChange = () => {
   return null;
 };
 
-// floating scroll to top btn
+// Floating button that appears after scrolling down so users can quickly return to the top.
 const ScrollTopButton = () => {
   const [visible, setVisible] = useState(false);
 
@@ -71,7 +74,8 @@ const ScrollTopButton = () => {
   );
 };
 
-// smart layout wrapper for seller and buyer
+// The seller layout wrapper chooses the correct shell for the current user.
+// Sellers get their dashboard navigation, while buyers continue with the standard layout.
 const SellerLayoutWrapper = () => {
   const { user } = useAuth();
   return user?.role === "seller" ? <SellerLayout /> : <Outlet />;
@@ -92,7 +96,9 @@ const App = () => {
     <div className=" min-h-screen w-full overflow-hidden">
       <ScrollToTopOnRouteChange />
       <ScrollTopButton />
+
       <Routes>
+        {/* Public pages that should be available to guests. */}
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -105,6 +111,7 @@ const App = () => {
         <Route path="/properties" element={<Properties />} />
         <Route path="/property/:id" element={<PropertyDetails />} />
 
+        {/* Logged-in users can access shared profile and communication pages. */}
         <Route
           element={
             <ProtectedRoute allowedRoles={["buyer", "seller", "admin"]} />
@@ -119,6 +126,7 @@ const App = () => {
             <Route path="/profile" element={<Profile />} />
           </Route>
 
+          {/* Seller-only pages for creating, updating, and managing listings. */}
           <Route element={<ProtectedRoute allowedRoles={["seller"]} />}>
             <Route element={<SellerLayout />}>
               <Route path="/dashboard" element={<SellerDashboard />} />
@@ -130,6 +138,7 @@ const App = () => {
             </Route>
           </Route>
 
+          {/* Admin-only pages for user moderation, approvals, and platform management. */}
           <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
             <Route element={<AdminLayout />}>
               <Route path="/admin-dashboard" element={<AdminDashboard />} />

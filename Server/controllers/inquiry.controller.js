@@ -1,7 +1,7 @@
 import Inquiry from "../models/inquiry.model.js";
 import Property from "../models/property.model.js";
 
-// buyer send inquiry
+// Record a buyer inquiry for a property and attach it to the relevant seller.
 export const sendInquiry = async (req, res) => {
   try {
     const { propertyId, message } = req.body;
@@ -31,7 +31,7 @@ export const sendInquiry = async (req, res) => {
   }
 };
 
-// seller view inquiries
+// Return all inquiries for the logged-in seller, including buyer and property details.
 export const getSellerInquiries = async (req, res) => {
   try {
     const inquiries = await Inquiry.find({ seller: req.user._id })
@@ -48,7 +48,7 @@ export const getSellerInquiries = async (req, res) => {
   }
 };
 
-// mark inquiry as read
+// Mark a specific inquiry as read so it no longer appears as unread in the seller UI.
 export const markInquiryAsRead = async (req, res) => {
   try {
     const inquiry = await Inquiry.findById(req.params.id);

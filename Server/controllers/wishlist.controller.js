@@ -1,6 +1,6 @@
 import Wishlist from "../models/wishlist.model.js";
 
-// to add a property to the wishlist
+// Save a property to the current user's wishlist if it is not already present.
 export const addWishlist = async (req, res) => {
   try {
     const propertyId = req.params.propertyId;
@@ -34,7 +34,7 @@ export const addWishlist = async (req, res) => {
   }
 };
 
-// to get the property that is in the wishlist
+// Fetch the current user's saved properties with the property details populated.
 export const getWishlist = async (req, res) => {
   try {
     const data = await Wishlist.find({ user: req.user._id }).populate(
@@ -50,7 +50,7 @@ export const getWishlist = async (req, res) => {
   }
 };
 
-// to remove a property from the wishlist
+// Remove a property from the user's wishlist and return a confirmation response.
 export const removeWishlist = async (req, res) => {
   try {
     const propertyId = req.params.propertyId;

@@ -10,6 +10,7 @@ import {
   HiOutlinePhone,
 } from "react-icons/hi";
 
+// Review pending seller onboarding requests and approve eligible applicants.
 const SellerRequests = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);

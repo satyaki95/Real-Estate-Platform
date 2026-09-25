@@ -19,6 +19,7 @@ import axios from "axios";
 import API_URL from "../../config";
 import PropertyCard from "../../components/common/PropertyCard";
 
+// Searchable property listing page with filtering and detail navigation.
 const Properties = () => {
   const navigate = useNavigate();
   const { user, token } = useAuth();

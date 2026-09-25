@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
+// Global authentication provider for the frontend.
+// It keeps the active user and JWT token available to all pages while providing
+// reusable login, registration, logout, and refresh helpers throughout the app.
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(
@@ -20,6 +23,7 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Restore the last known session from local/session storage when the app reloads.
     if (token) {
       const storedUser =
         localStorage.getItem("user") || sessionStorage.getItem("user");
@@ -46,7 +50,7 @@ export const AuthProvider = ({ children }) => {
     return () => axios.interceptors.response.eject(interceptor);
   }, [token]);
 
-  // login
+  // Log in the user, persist the token, and save the authenticated profile to storage.
   const login = async (email, password) => {
     try {
       const res = await axios.post(`${API_URL}/api/auth/login`, {
@@ -70,7 +74,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // register
+  // Register a new account and return a success or validation message from the backend.
   const register = async (userData) => {
     try {
       const res = await axios.post(`${API_URL}/api/auth/register`, userData);
@@ -86,7 +90,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // logout
+  // Clear all auth state and redirect the user to the login page.
   const logout = () => {
     setToken(null);
     setUser(null);
@@ -97,7 +101,7 @@ export const AuthProvider = ({ children }) => {
     navigate("/login");
   };
 
-  // to get the user details
+  // Fetch the latest user profile from the backend to keep the session current.
   const refreshUser = async () => {
     if (!token) return;
 

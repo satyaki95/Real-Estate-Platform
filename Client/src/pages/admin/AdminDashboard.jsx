@@ -12,6 +12,7 @@ import {
 } from "react-icons/hi";
 import MaintenanceAmenitySummary from "../../components/common/MaintenanceAmenitySummary";
 
+// Dashboard that loads overall platform statistics for the admin overview screen.
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
     totalUsers: 0,

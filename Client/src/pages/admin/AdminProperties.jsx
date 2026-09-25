@@ -9,6 +9,7 @@ import API_URL from "../../config";
 import { Link } from "react-router-dom";
 import { HiOutlineExternalLink, HiOutlineTrash } from "react-icons/hi";
 
+// View and moderate all platform listings from the admin property management screen.
 const AdminProperties = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);

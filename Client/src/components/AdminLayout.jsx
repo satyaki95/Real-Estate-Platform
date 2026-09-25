@@ -4,6 +4,7 @@ import AdminSidebar from "./AdminSidebar";
 import DashboardNavbar from "./DashboardNavbar";
 import { Outlet } from "react-router-dom";
 
+// Layout for all admin screens, including the sidebar and top navigation wrapper.
 const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 

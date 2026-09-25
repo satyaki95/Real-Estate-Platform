@@ -4,7 +4,10 @@ import sendEmail from "../utils/sendEmail.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
-// Register
+// Auth controller handles user registration, email verification, login,
+// password reset, and profile retrieval for the application.
+
+// Register a new user and send a verification code to their email.
 export const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;

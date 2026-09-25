@@ -9,6 +9,7 @@ import {
   HiOutlineHome,
 } from "react-icons/hi";
 
+// Display all buyer-to-seller inquiry conversations for the admin team.
 const AdminInquiries = () => {
   const [inquiries, setInquiries] = useState([]);
   const [error, setError] = useState(null);

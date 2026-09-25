@@ -7,6 +7,7 @@ import API_URL from "../config";
 
 const ChatContext = createContext();
 
+// Chat provider that keeps the active socket connection and message notification state shared app-wide.
 export const ChatProvider = ({ children }) => {
   const { user } = useAuth();
 
@@ -40,13 +41,14 @@ export const ChatProvider = ({ children }) => {
     }
   }, [user]);
 
-  // to join a chat
+  // Join a specific chat room so the socket can receive updates for that conversation.
   const joinChat = (chatId) => {
     if (socket) {
       socket.emit("joinChat", chatId);
     }
   };
 
+  // Send a message to a room and return the payload so the UI can update optimistically.
   const sendMessage = (
     chatId,
     text,

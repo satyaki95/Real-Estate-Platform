@@ -15,6 +15,7 @@ import {
 } from "react-icons/hi";
 import PropertyCard from "../../components/common/PropertyCard";
 
+// Show all listings owned by the current seller and let them manage status or delete them.
 const MyProperties = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);

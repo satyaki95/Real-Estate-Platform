@@ -1,6 +1,7 @@
 import Maintenance from "../models/maintenance.model.js";
 import Property from "../models/property.model.js";
 
+// Attach related property and user details to maintenance records before returning them.
 const populateRequest = (query) =>
   query
     .populate("property", "title city area")
@@ -8,6 +9,7 @@ const populateRequest = (query) =>
     .populate("seller", "name email phone")
     .sort({ createdAt: -1 });
 
+// Create a maintenance request tied to a property and the buyer/seller involved.
 export const createMaintenance = async (req, res) => {
   try {
     const { propertyId, title, description, preferredDate } = req.body;
@@ -27,15 +29,14 @@ export const createMaintenance = async (req, res) => {
     const populated = await populateRequest(Maintenance.findById(request._id));
     res.status(201).json({ success: true, request: populated });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: error.message || "Failed to create maintenance request",
-      });
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to create maintenance request",
+    });
   }
 };
 
+// Return maintenance requests for the current buyer or seller and populate related records.
 export const listMaintenance = async (req, res) => {
   try {
     const filter =
@@ -47,15 +48,14 @@ export const listMaintenance = async (req, res) => {
     const requests = await populateRequest(Maintenance.find(filter));
     res.json({ success: true, requests });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: error.message || "Failed to load maintenance requests",
-      });
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to load maintenance requests",
+    });
   }
 };
 
+// Update the status or schedule of a maintenance request and notify the involved users.
 export const updateMaintenance = async (req, res) => {
   try {
     const request = await Maintenance.findById(req.params.id);
@@ -85,11 +85,9 @@ export const updateMaintenance = async (req, res) => {
     io?.to("role:admin").emit("maintenanceUpdated", populated);
     res.json({ success: true, request: populated });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: error.message || "Failed to update maintenance request",
-      });
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to update maintenance request",
+    });
   }
 };

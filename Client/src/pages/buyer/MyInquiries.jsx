@@ -19,6 +19,7 @@ import {
   HiUser,
 } from "react-icons/hi";
 
+// List the current user's inquiries and provide quick actions like opening a chat or marking it read.
 const MyInquiries = () => {
   const { user, token } = useAuth();
   const [inquiries, setInquiries] = useState([]);

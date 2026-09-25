@@ -6,6 +6,7 @@ import axios from "axios";
 import API_URL from "../../config";
 import { HiUpload } from "react-icons/hi";
 
+// Form for creating a new property listing with images, details, and amenities.
 const AddProperty = () => {
   const navigate = useNavigate();
   const { token } = useAuth();

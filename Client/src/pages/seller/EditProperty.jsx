@@ -7,6 +7,7 @@ import axios from "axios";
 import API_URL from "../../config";
 import { HiUpload, HiX } from "react-icons/hi";
 
+// Form for editing an existing property listing and managing its attached media.
 const EditProperty = () => {
   const { id } = useParams();
   const navigate = useNavigate();

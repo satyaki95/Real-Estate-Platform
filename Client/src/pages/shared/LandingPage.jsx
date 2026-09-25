@@ -30,6 +30,7 @@ import banner from "../../assets/bannerimage.png";
 import PropertyCard from "../../components/common/PropertyCard";
 import logo from "../../assets/hexagonlogo1.png";
 
+// Public landing page for property discovery, categories, and search-driven browsing.
 const LandingPage = () => {
   const navigate = useNavigate();
   const { user, token } = useAuth();
