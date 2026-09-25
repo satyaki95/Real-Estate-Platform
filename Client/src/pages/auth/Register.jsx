@@ -33,7 +33,11 @@ const Register = () => {
     setError("");
     setSuccess("");
 
-    const result = await register(formData);
+    const normalizedRole = ["buyer", "seller", "admin"].includes(formData.role)
+      ? formData.role
+      : "buyer";
+
+    const result = await register({ ...formData, role: normalizedRole });
 
     if (result.success) {
       setSuccess("Registration successful! Redirecting to verification...");
@@ -154,6 +158,23 @@ const Register = () => {
                     className={s.hiddenRadio}
                   />
                   Seller
+                </label>
+                <label
+                  className={`${s.roleLabelBase} ${
+                    formData.role === "admin"
+                      ? s.roleLabelActive
+                      : s.roleLabelInactive
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="role"
+                    value="admin"
+                    checked={formData.role === "admin"}
+                    onChange={handleChange}
+                    className={s.hiddenRadio}
+                  />
+                  Admin
                 </label>
               </div>
             </div>

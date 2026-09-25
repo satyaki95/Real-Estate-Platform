@@ -8,6 +8,8 @@ import crypto from "crypto";
 export const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
+    const allowedRoles = ["buyer", "seller", "admin"];
+    const safeRole = allowedRoles.includes(role) ? role : "buyer";
     const userExists = await User.findOne({ email });
 
     if (userExists) {
@@ -27,8 +29,8 @@ export const register = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role,
-      isApproved: role === "seller" ? false : true,
+      role: safeRole,
+      isApproved: safeRole === "seller" ? false : true,
       verificationToken,
     });
 
