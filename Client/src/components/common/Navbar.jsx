@@ -44,6 +44,13 @@ const Navbar = () => {
             Wishlist
           </Link>
           <Link
+            to="/operations"
+            className={s.navLink}
+            onClick={() => setIsOpen(false)}
+          >
+            Services
+          </Link>
+          <Link
             to="/chat-messages"
             className={s.navLink}
             onClick={() => setIsOpen(false)}

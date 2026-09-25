@@ -18,6 +18,7 @@ import {
 } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import PropertyCard from "../../components/common/PropertyCard";
+import MaintenanceAmenitySummary from "../../components/common/MaintenanceAmenitySummary";
 
 const SellerDashboard = () => {
   const { logout, token } = useAuth();
@@ -210,6 +211,8 @@ const SellerDashboard = () => {
           </div>
         ))}
       </div>
+
+      <MaintenanceAmenitySummary role="seller" />
 
       <div className={s.listingsSection}>
         <div className={s.listingsHeader}>

@@ -13,7 +13,8 @@ import wishlistRouter from "./routes/wishlist.routes.js";
 import contactRouter from "./routes/contact.routes.js";
 import adminRouter from "./routes/admin.routes.js";
 import chatRouter from "./routes/chat.routes.js";
-import { Socket } from "dgram";
+import maintenanceRouter from "./routes/maintenance.routes.js";
+import amenityBookingRouter from "./routes/amenityBooking.routes.js";
 
 const app = express();
 const PORT = 5000;
@@ -47,6 +48,8 @@ app.use("/api/wishlist", wishlistRouter);
 app.use("/api/contact", contactRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/chat", chatRouter);
+app.use("/api/maintenance", maintenanceRouter);
+app.use("/api/amenity-bookings", amenityBookingRouter);
 
 app.get("/", (req, res) => {
   res.send("API WORKING");
@@ -60,8 +63,13 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+app.set("io", io);
 
 io.on("connection", (socket) => {
+  socket.on("joinUser", ({ userId, role }) => {
+    if (userId) socket.join(`user:${userId}`);
+    if (role) socket.join(`role:${role}`);
+  });
   socket.on("joinChat", (chatId) => {
     socket.join(chatId);
   });

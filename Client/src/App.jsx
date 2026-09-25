@@ -31,6 +31,7 @@ import MyInquiries from "./pages/buyer/MyInquiries";
 import ChatMessages from "./pages/shared/ChatMessages";
 import Contact from "./pages/shared/Contact";
 import Wishlist from "./pages/buyer/Wishlist";
+import Operations from "./pages/shared/Operations";
 
 // to scroll to top whenever the route is change
 const ScrollToTopOnRouteChange = () => {
@@ -113,6 +114,7 @@ const App = () => {
             <Route path="/inquiries" element={<MyInquiries />} />
             <Route path="/chat-messages" element={<ChatMessages />} />
             <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/operations" element={<Operations />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
@@ -139,6 +141,7 @@ const App = () => {
               <Route path="/admin/properties" element={<AdminProperties />} />
               <Route path="/admin/inquiries" element={<AdminInquiries />} />
               <Route path="/admin/contacts" element={<AdminContacts />} />
+              <Route path="/admin/operations" element={<Operations />} />
             </Route>
           </Route>
         </Route>

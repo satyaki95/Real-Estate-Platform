@@ -10,6 +10,7 @@ import {
   HiOutlineTicket,
   HiOutlineUserGroup,
 } from "react-icons/hi";
+import MaintenanceAmenitySummary from "../../components/common/MaintenanceAmenitySummary";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -125,6 +126,8 @@ const AdminDashboard = () => {
           </div>
         ))}
       </div>
+
+      <MaintenanceAmenitySummary role="admin" />
 
       <div className={s.secondGrid}>
         <div className={s.systemHealthCard}>

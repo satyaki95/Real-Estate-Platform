@@ -24,6 +24,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       path: "/admin/seller-requests",
     },
     { name: "Properties", icon: HiOutlineLibrary, path: "/admin/properties" },
+    { name: "Operations", icon: HiOutlineViewGrid, path: "/admin/operations" },
     { name: "Inquiries", icon: HiOutlineChatAlt2, path: "/admin/inquiries" },
     { name: "Contact Inbox", icon: HiOutlineMail, path: "/admin/contacts" },
   ];
