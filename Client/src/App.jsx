@@ -30,6 +30,7 @@ import { useAuth } from "./context/AuthContext";
 import MyInquiries from "./pages/buyer/MyInquiries";
 import ChatMessages from "./pages/shared/ChatMessages";
 import Contact from "./pages/shared/Contact";
+import Wishlist from "./pages/buyer/Wishlist";
 
 // to scroll to top whenever the route is change
 const ScrollToTopOnRouteChange = () => {
@@ -111,6 +112,7 @@ const App = () => {
           <Route element={<SellerLayoutWrapper />}>
             <Route path="/inquiries" element={<MyInquiries />} />
             <Route path="/chat-messages" element={<ChatMessages />} />
+            <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
