@@ -30,20 +30,30 @@ connectDB();
 // Restrict cross-origin requests to the frontend URL configured in the environment.
 // This helps prevent unauthorized access from other frontend while allowing
 // the React app to call the API during local development and production hosting.
-const clientUrl = process.env.CLIENT_URL;
-const allowedOrigins = [`${clientUrl}`].filter(Boolean);
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  }),
-);
+const allowedOrigins = [process.env.CLIENT_URL, process.env.CLIENT_URLS]
+  .filter(Boolean)
+  .flatMap((value) => value.split(","))
+  .map((value) => {
+    try {
+      return new URL(value.trim()).origin;
+    } catch {
+      return null;
+    }
+  })
+  .filter(Boolean);
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+
+    try {
+      return callback(null, allowedOrigins.includes(new URL(origin).origin));
+    } catch {
+      return callback(null, false);
+    }
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Register all backend route groups under a versioned-like API namespace.
@@ -72,7 +82,7 @@ const server = http.createServer(app);
 // emit events to specific users or conversation channels when needed.
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    ...corsOptions,
     methods: ["GET", "POST"],
   },
 });
