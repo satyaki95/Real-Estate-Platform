@@ -1,1 +1,1 @@
-Diployment - https://real-estate-gamma-roan-58.vercel.app
+Diployment - https://real-estate-platform-steel-zeta.vercel.app
