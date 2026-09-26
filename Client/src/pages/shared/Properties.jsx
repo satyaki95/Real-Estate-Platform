@@ -62,7 +62,7 @@ const Properties = () => {
     const initialFilters = {
       ...filters,
       city,
-      propertyTypes: type ? [type] : [],
+      propertyType: type ? [type] : [],
       bhk,
     };
 
