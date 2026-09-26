@@ -24,30 +24,20 @@ import amenityBookingRouter from "./routes/amenityBooking.routes.js";
 const app = express();
 const PORT = 5000;
 
-// Start the database connection once and wait for it before handling requests.
-const databaseConnection = connectDB();
+// Establish the MongoDB connection as soon as the backend starts.
+connectDB();
 
 // Restrict cross-origin requests to the frontend URL configured in the environment.
 // This helps prevent unauthorized access from other frontends while allowing
 // the React app to call the API during local development and production hosting.
-const normalizeOrigin = (value) => {
-  try {
-    return new URL(value.trim()).origin;
-  } catch {
-    return null;
-  }
-};
+const clientUrl = process.env.CLIENT_URL;
 const allowedOrigins = [
   "https://real-estate-platform-steel-zeta.vercel.app",
-  ...(process.env.CLIENT_URLS ?? "").split(","),
-  ...(process.env.CLIENT_URL ?? "").split(","),
-]
-  .map(normalizeOrigin)
-  .filter(Boolean);
+].filter(Boolean);
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(normalizeOrigin(origin))) {
+      if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
@@ -57,14 +47,6 @@ app.use(
   }),
 );
 app.use(express.json());
-app.use(async (req, res, next) => {
-  try {
-    await databaseConnection;
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
 
 // Register all backend route groups under a versioned-like API namespace.
 // Each router handles a specific feature area such as auth, property listings,
@@ -85,38 +67,39 @@ app.get("/", (req, res) => {
   res.send("API WORKING");
 });
 
-app.set("io", null);
+const server = http.createServer(app);
 
-// Vercel serves the exported Express app as a serverless function. Persistent
-// Socket.IO connections are only started in the local Node.js server.
-if (process.env.VERCEL !== "1") {
-  const server = http.createServer(app);
-  const io = new Server(server, {
-    cors: {
-      origin: allowedOrigins,
-      methods: ["GET", "POST"],
-    },
-  });
-  app.set("io", io);
+// Socket.IO enables real-time communication for chat rooms and live updates.
+// The backend stores the socket server on Express so controllers or routes can
+// emit events to specific users or conversation channels when needed.
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+  },
+});
+app.set("io", io);
 
-  io.on("connection", (socket) => {
-    socket.on("joinUser", ({ userId, role }) => {
-      if (userId) socket.join(`user:${userId}`);
-      if (role) socket.join(`role:${role}`);
-    });
-
-    socket.on("joinChat", (chatId) => {
-      socket.join(chatId);
-    });
-
-    socket.on("sendMessage", (data) => {
-      io.to(data.chatId).emit("receiveMessage", data);
-    });
+io.on("connection", (socket) => {
+  // Join a user-specific room so notifications can be sent to one user only.
+  socket.on("joinUser", ({ userId, role }) => {
+    if (userId) socket.join(`user:${userId}`);
+    if (role) socket.join(`role:${role}`);
   });
 
-  server.listen(PORT, () => {
-    console.log(`Server Started on http://localhost:${PORT}`);
+  // Join a specific conversation room for chat messaging.
+  socket.on("joinChat", (chatId) => {
+    socket.join(chatId);
   });
-}
 
-export default app;
+  // Broadcast a sent message to all users in that chat room.
+  socket.on("sendMessage", (data) => {
+    io.to(data.chatId).emit("receiveMessage", data);
+  });
+
+  socket.on("disconnect", () => {});
+});
+
+server.listen(PORT, () => {
+  console.log(`Server Started on http://localhost:${PORT}`);
+});
