@@ -30,13 +30,8 @@ connectDB();
 // Restrict cross-origin requests to the frontend URL configured in the environment.
 // This helps prevent unauthorized access from other frontends while allowing
 // the React app to call the API during local development and production hosting.
-const allowedOrigins = [
-  process.env.CLIENT_URL,
-  ...(process.env.CLIENT_URLS || "").split(","),
-  "https://real-estate-flax-xi-51.vercel.app",
-]
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+const clientUrl = process.env.CLIENT_URL;
+const allowedOrigins = [`${clientUrl}`].filter(Boolean);
 app.use(
   cors({
     origin: function (origin, callback) {
