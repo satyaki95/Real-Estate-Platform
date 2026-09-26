@@ -30,12 +30,24 @@ const databaseConnection = connectDB();
 // Restrict cross-origin requests to the frontend URL configured in the environment.
 // This helps prevent unauthorized access from other frontends while allowing
 // the React app to call the API during local development and production hosting.
-const clientUrl = process.env.CLIENT_URL;
-const allowedOrigins = [`${clientUrl}`].filter(Boolean);
+const normalizeOrigin = (value) => {
+  try {
+    return new URL(value.trim()).origin;
+  } catch {
+    return null;
+  }
+};
+const allowedOrigins = [
+  "https://real-estate-platform-steel-zeta.vercel.app",
+  ...(process.env.CLIENT_URLS ?? "").split(","),
+  ...(process.env.CLIENT_URL ?? "").split(","),
+]
+  .map(normalizeOrigin)
+  .filter(Boolean);
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.includes(normalizeOrigin(origin))) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
