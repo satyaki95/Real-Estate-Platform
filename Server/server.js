@@ -28,7 +28,7 @@ const PORT = 5000;
 connectDB();
 
 // Restrict cross-origin requests to the frontend URL configured in the environment.
-// This helps prevent unauthorized access from other frontends while allowing
+// This helps prevent unauthorized access from other frontend while allowing
 // the React app to call the API during local development and production hosting.
 const clientUrl = process.env.CLIENT_URL;
 const allowedOrigins = [`${clientUrl}`].filter(Boolean);
