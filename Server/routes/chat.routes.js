@@ -27,13 +27,13 @@ chatRouter.post("/start", async (req, res) => {
     }
 
     // check for existing chat between the buyer and seller
-    const chat = await Chat.findOne({
+    let chat = await Chat.findOne({
       buyer: buyerId,
       seller: finalSellerId,
     });
 
     if (!chat) {
-      chat = Chat.create({
+      chat = await Chat.create({
         property: propertyId,
         buyer: buyerId,
         seller: finalSellerId,
